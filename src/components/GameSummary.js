@@ -2,7 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  margin: .5rem 1rem 1rem 1rem;
+  margin: 0rem 1rem 0rem 1rem;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding-top: .2rem;
 `
 
 const Status = styled.span`
@@ -15,9 +18,9 @@ const Summary = styled.div`
   display: grid;
   grid-template-columns: 1.5fr .5fr .5fr 2fr 1.5fr;
   width: 100%;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 1rem;
+  padding: .2rem 0 1rem 0;
 
+  /* consider making new styled components for anchor tags, DRY */
   & a {
     color: inherit;
     text-decoration: none;
@@ -49,6 +52,14 @@ const Summary = styled.div`
     text-align: right;
     padding-right: .5rem;
   }
+
+  & .button a:hover {
+    color: #555;
+  }
+
+  & .button > * {
+    padding-left: .5rem;
+  }
 `
 
 const GameSummary = props => {
@@ -61,6 +72,7 @@ const GameSummary = props => {
             href={`https://www.mlb.com/${props.awayTeam.toLowerCase().replace(/\s/g, "")}`} 
             target="_blank" 
             className="away"
+            rel="noopener noreferrer"
             >
             {`${props.awayTeam} ${props.awayScore}`}
           </a>
@@ -69,13 +81,20 @@ const GameSummary = props => {
             href={`https://www.mlb.com/${props.homeTeam.toLowerCase().replace(/\s/g, "")}`} 
             target="_blank" 
             className="home"
+            rel="noopener noreferrer"
             >
             {`${props.homeTeam} ${props.homeScore}`}
           </a>
         </div>
         
         <div className="status">
-          <a href={`https://www.mlb.com/gameday/${props.gameId}`} target="_blank"> {props.final}</a>
+          <a 
+            href={`https://www.mlb.com/gameday/${props.gameId}`} 
+            target="_blank"
+            rel="noopener noreferrer"
+            > 
+            {props.final}
+          </a>
         </div>
 
         <div className="tv">
@@ -83,16 +102,32 @@ const GameSummary = props => {
         </div>
         
         <div className="pitchers">
-          <span> W: <a href={`https://www.mlb.com/player/${props.winnerUrl}`} target="_blank">{props.winningPitcher}</a></span>
-          <span> L: <a href={`https://www.mlb.com/player/${props.loserUrl}`} target="_blank">{props.losingPitcher}</a></span>
-          {props.savePitcher ? <span> SV: <a href={`https://www.mlb.com/player/${props.saveUrl}`} target="_blank">{props.savePitcher}</a></span> : null}
+          <span> W: <a href={`https://www.mlb.com/player/${props.winnerUrl}`} target="_blank" rel="noopener noreferrer">{props.winningPitcher}</a></span>
+          <span> L: <a href={`https://www.mlb.com/player/${props.loserUrl}`} target="_blank" rel="noopener noreferrer">{props.losingPitcher}</a></span>
+          {props.savePitcher ? <span> SV: <a href={`https://www.mlb.com/player/${props.saveUrl}`} target="_blank" rel="noopener noreferrer">{props.savePitcher}</a></span> : null}
         </div>
 
         <div className="button">
-          <span id="wrapup"> WRAP</span>
-          <span id="video"> VIDEO</span>
+
+          <a 
+            href={`https://www.mlb.com/gameday/${props.gameId}/final/wrap`} 
+            target="_blank" 
+            id="wrapup"
+            rel="noopener noreferrer"
+            >
+            WRAP
+          </a>
+
+          <a 
+            href={`https://www.mlb.com/gameday/${props.gameId}/final/video`} 
+            target="_blank" 
+            id="video"
+            rel="noopener noreferrer"
+            > 
+            VIDEO
+          </a>
+
         </div>
-        
       </Summary>
     </Wrapper>
   );
