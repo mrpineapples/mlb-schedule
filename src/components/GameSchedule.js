@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import GameSummary from './GameSummary';
 import GameDate from './GameDate';
+import SeriesType from './SeriesType';
 
 const url = "http://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=2018&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)"
 
@@ -25,6 +26,9 @@ class GameSchedule extends Component {
     this.state.data.series.forEach(series => games.push(series.games))
 
     const gameDates = [...new Set(games.flat().map(item => item.gameDate.split("T")[0]).sort())]
+    const rounds = [...new Set(games.flat().map(item => item.seriesDescription))]
+    // Push world series to end of Array so series are in order
+    rounds.push(rounds.shift());
 
     // For now im passing a lot of props, will get back to it if I have some time
     // My thought here was to make an array with all the game summaries (35) and then filter the ones needed per game day. Components are just objects in the end
@@ -46,10 +50,10 @@ class GameSchedule extends Component {
         saveUrl={game.decisions.save ? game.decisions.save.nameSlug : null}
         final={game.linescore.scheduledInnings !== game.linescore.currentInning ? `F/${game.linescore.currentInning}`: "FINAL"}
         date={game.gameDate.split("T")[0]}
+        round={game.seriesDescription}
       />
     )
     
-
     let schedule = gameDates.map(date => (
         <React.Fragment key={date}>
           <GameDate date={date} />
@@ -57,6 +61,15 @@ class GameSchedule extends Component {
         </React.Fragment>
       )
     )
+
+    if (this.props.sort === "round") {
+      schedule = rounds.map(round => (
+        <React.Fragment key={round}>
+          <SeriesType round={round} />
+          {summaries.filter(summary => summary.props.round === round)}
+        </React.Fragment>
+      ))
+    }
 
     return schedule;
   }
