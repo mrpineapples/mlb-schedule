@@ -20,7 +20,7 @@ const Summary = styled.div`
   width: 100%;
   padding: .2rem 0 1rem 0;
 
-  /* consider making new styled components for anchor tags, DRY */
+  /* consider making new styled component for anchor tags, DRY */
   & a {
     color: inherit;
     text-decoration: none;
@@ -62,12 +62,22 @@ const Summary = styled.div`
   }
 `
 
+const StyledDate = styled.div`
+  display: inline-block;
+  width: 5rem;
+`
+
 const GameSummary = props => {
+  const gameDate = new Date(`${props.date} EDT`)
+  const options = { month: "short", day: 'numeric' };
+  const gameDateString = gameDate.toLocaleDateString("default", options)
+
   return (
     <Wrapper>
       <Status>{props.seriesStatus}</Status>
       <Summary>
         <div className="teams">
+          {props.sortBy === "round" ? <StyledDate>{gameDateString}</StyledDate> : null}
           <a 
             href={`https://www.mlb.com/${props.awayTeam.toLowerCase().replace(/\s/g, "")}`} 
             target="_blank" 
@@ -98,13 +108,13 @@ const GameSummary = props => {
         </div>
 
         <div className="tv">
-          <span> {props.broadcast}</span>
+          <span>{props.broadcast}</span>
         </div>
         
         <div className="pitchers">
-          <span> W: <a href={`https://www.mlb.com/player/${props.winnerUrl}`} target="_blank" rel="noopener noreferrer">{props.winningPitcher}</a></span>
-          <span> L: <a href={`https://www.mlb.com/player/${props.loserUrl}`} target="_blank" rel="noopener noreferrer">{props.losingPitcher}</a></span>
-          {props.savePitcher ? <span> SV: <a href={`https://www.mlb.com/player/${props.saveUrl}`} target="_blank" rel="noopener noreferrer">{props.savePitcher}</a></span> : null}
+          <span> W: <a href={`https://www.mlb.com/player/${props.winnerUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.winningPitcher}</a></span>
+          <span> L: <a href={`https://www.mlb.com/player/${props.loserUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.losingPitcher}</a></span>
+          {props.savePitcher ? <span> SV: <a href={`https://www.mlb.com/player/${props.saveUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.savePitcher}</a></span> : null}
         </div>
 
         <div className="button">

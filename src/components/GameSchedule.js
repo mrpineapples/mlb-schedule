@@ -43,14 +43,15 @@ class GameSchedule extends Component {
         homeScore={game.teams.home.score}
         broadcast={game.broadcasts.find(obj => obj.isNational).callSign}
         winningPitcher={game.decisions.winner.initLastName}
-        winnerUrl={game.decisions.winner.nameSlug}
+        winnerUrlSlug={game.decisions.winner.nameSlug}
         losingPitcher={game.decisions.loser.initLastName}
-        loserUrl={game.decisions.loser.nameSlug}
+        loserUrlSlug={game.decisions.loser.nameSlug}
         savePitcher={game.decisions.save ? game.decisions.save.initLastName : null}
-        saveUrl={game.decisions.save ? game.decisions.save.nameSlug : null}
+        saveUrlSlug={game.decisions.save ? game.decisions.save.nameSlug : null}
         final={game.linescore.scheduledInnings !== game.linescore.currentInning ? `F/${game.linescore.currentInning}`: "FINAL"}
         date={game.gameDate.split("T")[0]}
         round={game.seriesDescription}
+        sortBy={this.props.sort}
       />
     )
     
