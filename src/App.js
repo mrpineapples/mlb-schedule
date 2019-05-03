@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import GameSchedule from "./components/GameSchedule";
 import SortOptions from "./components/SortOptions";
+import SectionTitle from "./components/SectionTitle";
 
 class App extends Component {
   state = {
@@ -28,6 +29,7 @@ class App extends Component {
   render() {
     return ( 
       <React.Fragment>
+        <SectionTitle>Schedule</SectionTitle>
         <SortOptions 
           isDateActive={this.state.dateActive}
           isRoundActive={this.state.roundActive}
