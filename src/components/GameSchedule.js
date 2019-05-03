@@ -24,15 +24,17 @@ class GameSchedule extends Component {
 
     let games = [];
     this.state.data.series.forEach(series => games.push(series.games))
+    games = games.flat()
+    console.log(games)
 
-    const gameDates = [...new Set(games.flat().map(item => item.gameDate.split("T")[0]).sort())]
-    const rounds = [...new Set(games.flat().map(item => item.seriesDescription))]
+    const gameDates = [...new Set(games.map(item => item.gameDate.split("T")[0]).sort())]
+    const rounds = [...new Set(games.map(item => item.seriesDescription))]
     // Push world series to end of Array so series are in order
     rounds.push(rounds.shift());
 
     // For now im passing a lot of props, will get back to it if I have some time
     // My thought here was to make an array with all the game summaries (35) and then filter the ones needed per game day. Components are just objects in the end
-    let summaries = games.flat().map(game => 
+    let summaries = games.map(game => 
       <GameSummary
         key={game.gamePk}
         gameId={game.gamePk}
