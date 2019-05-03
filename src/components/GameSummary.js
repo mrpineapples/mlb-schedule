@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+import broadcastImage from "../util/broadcastImage";
 
 const Wrapper = styled.div`
   margin: 0rem 1rem 0rem 1rem;
@@ -107,7 +108,7 @@ const GameSummary = props => {
         </div>
 
         <div className="tv">
-          <span>{props.broadcast}</span>
+          {broadcastImage(props.broadcast)}
         </div>
         
         <div className="pitchers">
