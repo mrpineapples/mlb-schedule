@@ -9,11 +9,7 @@ const GameDay = styled.div`
 `
 
 const GameDate = props => {
-  const gameDate = new Date(`${props.date} EDT`)
-  const options = { weekday: 'long', month: "short", day: 'numeric' };
-  const gameDateString = gameDate.toLocaleDateString("default", options)
-
-  return <GameDay>{gameDateString}</GameDay>
+  return <GameDay>{props.date}</GameDay>
 }
 
 export default GameDate;

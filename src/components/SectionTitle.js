@@ -3,6 +3,7 @@ import styled from "styled-components";
 const SectionTitle = styled.h1`
   overflow: hidden;
   text-align: center;
+  font-weight: 500;
 
   &:before,
   &:after {

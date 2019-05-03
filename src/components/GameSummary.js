@@ -68,16 +68,15 @@ const StyledDate = styled.div`
 `
 
 const GameSummary = props => {
-  const gameDate = new Date(`${props.date} EDT`)
-  const options = { month: "short", day: 'numeric' };
-  const gameDateString = gameDate.toLocaleDateString("default", options)
+  // Only used when sorting by round
+  const gameMonthAndDate = props.date.split(",")[1]
 
   return (
     <Wrapper>
       <Status>{props.seriesStatus}</Status>
       <Summary>
         <div className="teams">
-          {props.sortBy === "round" ? <StyledDate>{gameDateString}</StyledDate> : null}
+          {props.sortBy === "round" ? <StyledDate>{gameMonthAndDate}</StyledDate> : null}
           <a 
             href={`https://www.mlb.com/${props.awayTeam.toLowerCase().replace(/\s/g, "")}`} 
             target="_blank" 

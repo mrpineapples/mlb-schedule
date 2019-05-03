@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GameSummary from './GameSummary';
 import GameDate from './GameDate';
 import SeriesType from './SeriesType';
+import { formatDate } from "../util/dataUtilities"
 
 const url = "http://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=2018&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)"
 
@@ -25,9 +26,10 @@ class GameSchedule extends Component {
     let games = [];
     this.state.data.series.forEach(series => games.push(series.games))
     games = games.flat()
-    console.log(games)
 
-    const gameDates = [...new Set(games.map(item => item.gameDate.split("T")[0]).sort())]
+    let gameDates = games.map(item => new Date(item.gameDate)).sort((a,b) => a - b)
+    gameDates = [...new Set(gameDates.map(date => formatDate(date)))]
+
     const rounds = [...new Set(games.map(item => item.seriesDescription))]
     // Push world series to end of Array so series are in order
     rounds.push(rounds.shift());
@@ -51,7 +53,7 @@ class GameSchedule extends Component {
         savePitcher={game.decisions.save ? game.decisions.save.initLastName : null}
         saveUrlSlug={game.decisions.save ? game.decisions.save.nameSlug : null}
         final={game.linescore.scheduledInnings !== game.linescore.currentInning ? `F/${game.linescore.currentInning}`: "FINAL"}
-        date={game.gameDate.split("T")[0]}
+        date={formatDate(game.gameDate)}
         round={game.seriesDescription}
         sortBy={this.props.sort}
       />
