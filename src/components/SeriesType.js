@@ -1,22 +1,21 @@
 import React from 'react';
-import styled from "styled-components";
-
-const Header = styled.div`
-  font-size: 1.6rem;
-  font-weight: 500;
-  margin: 1.5rem 1rem 0 1rem;
-  padding-bottom: .5rem;
-`
+import SummaryHeader from './SummaryHeader';
 
 const SeriesType = props => {
   let series = props.round
 
-  if (props.round === "Regular Season") {
-    series = "Tiebreakers"
+  if (series.includes("LDS")) {
+    series = series.split(" ")[0]
+  } else if (series.includes("WC")) {
+    series = series.replace("WC", " Wild Card")
+  } else if (series.includes("LTB")) {
+    series = series.split("T")[0] + " Tiebreaker"
+  } else if (series === "WS") {
+    series = "World Series"
   }
 
   return (
-    <Header>{series}</Header>
+    <SummaryHeader>{series}</SummaryHeader>
   )
 }
 
