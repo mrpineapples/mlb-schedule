@@ -8,21 +8,32 @@ const url = "http://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1
 
 class GameSchedule extends Component {
   state = {
-    data: null
+    data: null,
   }
 
   componentDidMount() {
     fetch(url)
       .then(res => res.json())
       .then(jsonData => this.setState({data: jsonData}))
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.data !== this.state.data) {
+        this.setState({
+          postseasonData: this._transformData(),
+          gameDates: this._createGameDates()
+        })
+    }
+}
+
   
   _transformData = () => {
     let postseasonData = this.state.data.series.map(round => { 
       let seriesId = round.series.id
-      let newGames = round.games.map(game => {
 
+      let newGames = round.games.map(game => {
+        // need all team data so should stop at game.teams.away/home
         let awayTeam = game.teams.away.team.teamName
         let homeTeam = game.teams.home.team.teamName
 
@@ -38,7 +49,6 @@ class GameSchedule extends Component {
           seriesId,
           awayTeam,
           homeTeam,
-
           winningPitcher,
           winnerUrlSlug,
           losingPitcher,
@@ -51,8 +61,6 @@ class GameSchedule extends Component {
 
       return newGames
     })
-
-    console.log(postseasonData)
     return postseasonData
   }
 
@@ -76,18 +84,15 @@ class GameSchedule extends Component {
   }
 
   render() {
-    if (this.state.data === null) {
+    if (!this.state.data || !this.state.gameDates) {
       return null
     }
 
-    let games = [];
-    this.state.data.series.forEach(series => games.push(series.games))
-    games = games.flat()
-
-    let gameDates = games.map(item => new Date(item.gameDate)).sort((a, b) => a - b)
-    gameDates = [...new Set(gameDates.map(date => formatDate(date)))]
-
+    // flat() breaks up each series into array of games
+    let games = this.state.postseasonData.map(series => series).flat()
+    
     const rounds = [...new Set(games.map(item => item.seriesDescription))]
+    console.log(rounds)
     // Push world series to end of Array so series are in order
     rounds.push(rounds.shift());
 
@@ -99,28 +104,21 @@ class GameSchedule extends Component {
         // seriesMetaData={...}
         key={game.gamePk}
         gameId={game.gamePk}
-        seriesStatus={`${game.seriesStatus.shortDescription} - ${game.seriesStatus.result}`}
+        seriesStatus={game.seriesStatus}
         round={game.seriesDescription}
-        final={game.linescore.scheduledInnings !== game.linescore.currentInning ? `F/${game.linescore.currentInning}`: "FINAL"}
+        linescore={game.linescore}
         date={formatDate(game.gameDate)}
-        broadcast={game.broadcasts.find(obj => obj.isNational).callSign}
+        broadcast={game.broadcasts}
         // awayTeamData={....}
-        awayTeam={game.teams.away.team.teamName}
-        awayScore={game.teams.away.score}
+        awayTeamData={game.teams.away}
         // homeTeamData={...}
-        homeTeam={game.teams.home.team.teamName}
-        homeScore={game.teams.home.score}
+        homeTeamData={game.teams.home}
         // decisions={...}
-        winningPitcher={game.decisions.winner.initLastName}
-        winnerUrlSlug={game.decisions.winner.nameSlug}
-        losingPitcher={game.decisions.loser.initLastName}
-        loserUrlSlug={game.decisions.loser.nameSlug}
-        savePitcher={game.decisions.save ? game.decisions.save.initLastName : null}
-        saveUrlSlug={game.decisions.save ? game.decisions.save.nameSlug : null}
+        decisions={game.decisions}
       />
     )
     
-    let schedule = gameDates.map(date => (
+    let schedule = this.state.gameDates.map(date => (
         <React.Fragment key={date}>
           <GameDate date={date} />
           {summaries.filter(summary => summary.props.date === date)}

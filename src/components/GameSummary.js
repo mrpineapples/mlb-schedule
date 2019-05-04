@@ -68,59 +68,81 @@ const StyledDate = styled.div`
   width: 5rem;
 `
 
+const formatTeamForUrl = name => {
+  return name.toLowerCase().replace(/\s/g, "")
+}
+
 const GameSummary = props => {
   // Only used when sorting by round
   const gameMonthAndDate = props.date.split(",")[1]
 
+  const seriesStatus = `${props.seriesStatus.shortDescription} - ${props.seriesStatus.result}`;
+  const awayTeam = props.awayTeamData.team.teamName;
+  const awayScore = props.awayTeamData.score;
+  const homeTeam = props.homeTeamData.team.teamName;
+  const homeScore = props.homeTeamData.score;
+  const gameFinal = props.linescore.scheduledInnings !== props.linescore.currentInning ? `F/${props.linescore.currentInning}`: "FINAL";
+  const broadcast = broadcastImage(props.broadcast.find(obj => obj.isNational).callSign);
+  const winningPitcher = props.decisions.winner.initLastName;
+  const winnerUrlSlug = props.decisions.winner.nameSlug
+  const losingPitcher = props.decisions.loser.initLastName;
+  const loserUrlSlug = props.decisions.loser.nameSlug
+  const savePitcher = props.decisions.save ? props.decisions.save.initLastName : null;
+  const saveUrlSlug = props.decisions.save ? props.decisions.save.nameSlug : null;
+  const baseUrl = `https://www.mlb.com`;
+  const awayTeamUrl = `${baseUrl}/${formatTeamForUrl(awayTeam)}`;
+  const homeTeamUrl = `${baseUrl}/${formatTeamForUrl(homeTeam)}`;
+  
+
   return (
     <Wrapper>
-      <Status>{props.seriesStatus}</Status>
+      <Status>{seriesStatus}</Status>
       <Summary>
         <div className="teams">
           {props.sortBy === "round" ? <StyledDate>{gameMonthAndDate}</StyledDate> : null}
           <a 
-            href={`https://www.mlb.com/${props.awayTeam.toLowerCase().replace(/\s/g, "")}`} 
+            href={awayTeamUrl} 
             target="_blank" 
             className="away"
             rel="noopener noreferrer"
             >
-            {`${props.awayTeam} ${props.awayScore}`}
+            {`${awayTeam} ${awayScore}`}
           </a>
           <span> @ </span>
           <a 
-            href={`https://www.mlb.com/${props.homeTeam.toLowerCase().replace(/\s/g, "")}`} 
+            href={homeTeamUrl} 
             target="_blank" 
             className="home"
             rel="noopener noreferrer"
             >
-            {`${props.homeTeam} ${props.homeScore}`}
+            {`${homeTeam} ${homeScore}`}
           </a>
         </div>
         
         <div className="status">
           <a 
-            href={`https://www.mlb.com/gameday/${props.gameId}`} 
+            href={`${baseUrl}/gameday/${props.gameId}`} 
             target="_blank"
             rel="noopener noreferrer"
             > 
-            {props.final}
+            {gameFinal}
           </a>
         </div>
 
         <div className="tv">
-          {broadcastImage(props.broadcast)}
+          {broadcast}
         </div>
         
         <div className="pitchers">
-          <span> W: <a href={`https://www.mlb.com/player/${props.winnerUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.winningPitcher}</a></span>
-          <span> L: <a href={`https://www.mlb.com/player/${props.loserUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.losingPitcher}</a></span>
-          {props.savePitcher ? <span> SV: <a href={`https://www.mlb.com/player/${props.saveUrlSlug}`} target="_blank" rel="noopener noreferrer">{props.savePitcher}</a></span> : null}
+          <span> W: <a href={`${baseUrl}/player/${winnerUrlSlug}`} target="_blank" rel="noopener noreferrer">{winningPitcher}</a></span>
+          <span> L: <a href={`${baseUrl}/player/${loserUrlSlug}`} target="_blank" rel="noopener noreferrer">{losingPitcher}</a></span>
+          {savePitcher ? <span> SV: <a href={`${baseUrl}/player/${saveUrlSlug}`} target="_blank" rel="noopener noreferrer">{savePitcher}</a></span> : null}
         </div>
 
         <div className="button">
 
           <a 
-            href={`https://www.mlb.com/gameday/${props.gameId}/final/wrap`} 
+            href={`${baseUrl}/gameday/${props.gameId}/final/wrap`} 
             target="_blank" 
             id="wrapup"
             rel="noopener noreferrer"
@@ -129,7 +151,7 @@ const GameSummary = props => {
           </a>
 
           <a 
-            href={`https://www.mlb.com/gameday/${props.gameId}/final/video`} 
+            href={`${baseUrl}/gameday/${props.gameId}/final/video`} 
             target="_blank" 
             id="video"
             rel="noopener noreferrer"
