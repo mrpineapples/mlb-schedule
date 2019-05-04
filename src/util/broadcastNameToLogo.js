@@ -5,7 +5,7 @@ import fs1 from "../images/broadcastImages/fs1.svg"
 import mlbnet from "../images/broadcastImages/mlbnet.svg" 
 import tbs from "../images/broadcastImages/tbs.svg" 
 
-const broadcastImage = name => {
+const broadcastNameToLogo = name => {
   switch (name) {
     case "ESPN":
       return <img src={espn} height="12" alt="ESPN" />;
@@ -23,4 +23,4 @@ const broadcastImage = name => {
   }
 }
 
-export default broadcastImage;
+export default broadcastNameToLogo;
