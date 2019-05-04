@@ -8,28 +8,31 @@ const url = "http://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1
 
 class GameSchedule extends Component {
   state = {
-    data: null,
+    postseasonData: null,
+    gameDates: null
   }
 
-  componentDidMount() {
+  componentDidMount() {    
     fetch(url)
       .then(res => res.json())
-      .then(jsonData => this.setState({data: jsonData}))
+      .then(jsonData => {
+        let cleanedData = this._cleanMlbData(jsonData)
+        let rounds = this._createRoundsList(jsonData)
+        let games = this._createGamesList(jsonData)
+        let gameDates = this._createGameDates(jsonData)
+        
+        return this.setState({
+          postseasonData: cleanedData,
+          rounds: rounds,
+          games: games,
+          gameDates: gameDates
+        })
+      })
       .catch(err => console.log(err));
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.data !== this.state.data) {
-        this.setState({
-          postseasonData: this._transformData(),
-          gameDates: this._createGameDates()
-        })
-    }
-}
-
-  
-  _transformData = () => {
-    let postseasonData = this.state.data.series.map(round => { 
+  _cleanMlbData = mlbData => {
+    let postseasonData = mlbData.series.map(round => { 
       let seriesId = round.series.id
 
       let newGames = round.games.map(game => {
@@ -64,10 +67,32 @@ class GameSchedule extends Component {
     return postseasonData
   }
 
-  _createGameDates = () => {
+  _createRoundsList = mlbData => {
+    let roundsSet = new Set();
+
+    let games = mlbData.series.map(round => round.games).flat()
+    
+    games.forEach(game => {
+      let round = game.seriesDescription
+      roundsSet.add(round)
+    })
+
+    let rounds = [...roundsSet];
+
+    // Push world series to end of Array so series are in order
+    rounds.push(rounds.shift());
+    return rounds
+  }
+
+  _createGamesList = mlbData => {
+    let games = mlbData.series.map(round => round.games).flat()
+    return games
+  }
+
+  _createGameDates = mlbData => {
     let datesSet = new Set()
 
-    let games = this.state.data.series.map(round => round.games).flat()
+    let games = mlbData.series.map(round => round.games).flat()
     games.sort((a, b) => { 
       let dateA = new Date(a.gameDate)
       let dateB = new Date(b.gameDate)
@@ -83,18 +108,16 @@ class GameSchedule extends Component {
     return gameDates
   }
 
+ 
+
   render() {
-    if (!this.state.data || !this.state.gameDates) {
+    if (!this.state.postseasonData) {
       return null
     }
 
-    // flat() breaks up each series into array of games
-    let games = this.state.postseasonData.map(series => series).flat()
-    
-    const rounds = [...new Set(games.map(item => item.seriesDescription))]
-    console.log(rounds)
-    // Push world series to end of Array so series are in order
-    rounds.push(rounds.shift());
+    const games = this.state.games
+    const rounds = this.state.rounds
+    const gameDates = this.state.gameDates
 
     // For now im passing a lot of props, will get back to it if I have some time
     // My thought here was to make an array with all the game summaries (35) and then filter the ones needed per game day. Components are just objects in the end
@@ -118,7 +141,7 @@ class GameSchedule extends Component {
       />
     )
     
-    let schedule = this.state.gameDates.map(date => (
+    let schedule = gameDates.map(date => (
         <React.Fragment key={date}>
           <GameDate date={date} />
           {summaries.filter(summary => summary.props.date === date)}
