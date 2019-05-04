@@ -19,10 +19,7 @@ class GameSchedule extends Component {
   }
   
   _transformData = () => {
-    // console.log(this.state.data.series)
-    let bracketSeries = this.state.data.series.map(round => {
-      
-      // _addSeriesIdToEachGame
+    let postseasonData = this.state.data.series.map(round => { 
       let seriesId = round.series.id
       let newGames = round.games.map(game => {
 
@@ -37,7 +34,7 @@ class GameSchedule extends Component {
         let saveUrlSlug = game.decisions.save ? game.decisions.save.nameSlug : null;
 
         let data = { 
-          ...game, 
+          ...game,
           seriesId,
           awayTeam,
           homeTeam,
@@ -49,15 +46,33 @@ class GameSchedule extends Component {
           savePitcher,
           saveUrlSlug
         }
-    
         return data
-
       })
-      round.games = newGames
-      return round
+
+      return newGames
     })
 
-    return bracketSeries
+    console.log(postseasonData)
+    return postseasonData
+  }
+
+  _createGameDates = () => {
+    let datesSet = new Set()
+
+    let games = this.state.data.series.map(round => round.games).flat()
+    games.sort((a, b) => { 
+      let dateA = new Date(a.gameDate)
+      let dateB = new Date(b.gameDate)
+      return dateA - dateB
+    })
+   
+    games.forEach(game => {
+      let calendarDate = formatDate(game.gameDate)
+      datesSet.add(calendarDate)
+    })
+
+    let gameDates = [...datesSet]
+    return gameDates
   }
 
   render() {
@@ -69,7 +84,7 @@ class GameSchedule extends Component {
     this.state.data.series.forEach(series => games.push(series.games))
     games = games.flat()
 
-    let gameDates = games.map(item => new Date(item.gameDate)).sort((a,b) => a - b)
+    let gameDates = games.map(item => new Date(item.gameDate)).sort((a, b) => a - b)
     gameDates = [...new Set(gameDates.map(date => formatDate(date)))]
 
     const rounds = [...new Set(games.map(item => item.seriesDescription))]
