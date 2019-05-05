@@ -7,6 +7,7 @@ const SortButton = styled.button`
   font-size: 1rem;
   padding: .7rem 1.5rem; 
   cursor: pointer;
+  margin: 0;
 
   &:not(:last-child) {
     border-right: none;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
-import broadcastNameToLogo from "../util/broadcastNameToLogo";
-import teamNameToLogo from '../util/teamNameToLogo';
+import broadcastNameToLogo from "../lib/util/broadcastNameToLogo";
+import teamNameToLogo from '../lib/util/teamNameToLogo';
 
 const Wrapper = styled.div`
   margin: 0rem 1rem 0rem 1rem;
