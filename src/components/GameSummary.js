@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import broadcastImage from "../util/broadcastImage";
+import teamNameToLogo from '../util/teamNameToLogo';
 
 const Wrapper = styled.div`
   margin: 0rem 1rem 0rem 1rem;
@@ -22,10 +23,21 @@ const Summary = styled.div`
   padding: .2rem 0 1rem 0;
 
   /* consider making new styled component for anchor tags, DRY */
+  #amp {
+    font-size: .9rem;
+    margin-right: .25rem;
+  }
+
   & a {
     color: inherit;
     text-decoration: none;
     cursor: pointer; 
+  }
+
+  & .teams img {
+    vertical-align: middle;
+    margin-right: .5rem;
+    margin-bottom: .2rem;
   }
   
   & .away:hover {
@@ -68,7 +80,7 @@ const StyledDate = styled.div`
   width: 5rem;
 `
 
-const formatTeamForUrl = name => {
+const removeSpaceAndLower = name => {
   return name.toLowerCase().replace(/\s/g, "")
 }
 
@@ -78,8 +90,10 @@ const GameSummary = props => {
 
   const seriesStatus = `${props.seriesStatus.shortDescription} - ${props.seriesStatus.result}`;
   const awayTeam = props.awayTeamData.team.teamName;
+  const awayTeamLogo = teamNameToLogo(removeSpaceAndLower(awayTeam));
   const awayScore = props.awayTeamData.score;
   const homeTeam = props.homeTeamData.team.teamName;
+  const homeTeamLogo = teamNameToLogo(removeSpaceAndLower(homeTeam));
   const homeScore = props.homeTeamData.score;
   const gameFinal = props.linescore.scheduledInnings !== props.linescore.currentInning ? `F/${props.linescore.currentInning}`: "FINAL";
   const broadcast = broadcastImage(props.broadcast.find(obj => obj.isNational).callSign);
@@ -90,8 +104,8 @@ const GameSummary = props => {
   const savePitcher =  props.pitcherDecisions.savePitcher;
   const saveUrlSlug =  props.pitcherDecisions.saveUrlSlug;
   const baseUrl = `https://www.mlb.com`;
-  const awayTeamUrl = `${baseUrl}/${formatTeamForUrl(awayTeam)}`;
-  const homeTeamUrl = `${baseUrl}/${formatTeamForUrl(homeTeam)}`;
+  const awayTeamUrl = `${baseUrl}/${removeSpaceAndLower(awayTeam)}`;
+  const homeTeamUrl = `${baseUrl}/${removeSpaceAndLower(homeTeam)}`;
   
 
   return (
@@ -106,15 +120,17 @@ const GameSummary = props => {
             className="away"
             rel="noopener noreferrer"
             >
+            {awayTeamLogo}
             {`${awayTeam} ${awayScore}`}
           </a>
-          <span> @ </span>
+          <span id="amp"> @ </span>
           <a 
             href={homeTeamUrl} 
             target="_blank" 
             className="home"
             rel="noopener noreferrer"
             >
+            {homeTeamLogo}
             {`${homeTeam} ${homeScore}`}
           </a>
         </div>
