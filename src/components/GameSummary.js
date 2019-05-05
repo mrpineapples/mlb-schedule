@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import broadcastImage from "../util/broadcastImage";
+import broadcastNameToLogo from "../util/broadcastNameToLogo";
 import teamNameToLogo from '../util/teamNameToLogo';
 
 const Wrapper = styled.div`
@@ -18,60 +18,102 @@ const Status = styled.span`
 
 const Summary = styled.div`
   display: grid;
-  grid-template-columns: 1.5fr .5fr .5fr 2fr 1.5fr;
+  align-items: center;
+  grid-template-rows: ${props => props.sort === "round" ? "16% 20% 16% 16% 16% 16%" : "20% 20% 20% 20% 20%"};
   width: 100%;
-  padding: .2rem 0 1rem 0;
+  margin: .5rem 0 1rem 0;
+  font-size: 1rem;
 
-  /* consider making new styled component for anchor tags, DRY */
-  #amp {
-    font-size: .9rem;
-    margin-right: .25rem;
-  }
-
-  & a {
+  a {
     color: inherit;
     text-decoration: none;
     cursor: pointer; 
+
+    &:hover {
+      color: #147cd1;
+    }
   }
 
-  & .teams img {
-    vertical-align: middle;
-    margin-right: .5rem;
-    margin-bottom: .2rem;
-  }
-  
-  & .away:hover {
-    color: #147cd1;
+  .date {
+    order: -1;
   }
 
-  & .home:hover {
-    color: #147cd1;
+  .matchup {
+    order: -1;
+
+    & img {
+      vertical-align: middle;
+      margin-right: .5rem;
+    }
+
+    & #amp {
+      font-size: .9rem;
+      margin-right: .25rem;
+    }
   }
 
-  & .status a:hover {
-    color: #147cd1;
+  .pitchers {
+    order: -1;
+
+    & span {
+      margin-right: .5rem;
+    }
+    
+    & a {
+      color: #147cd1;
+    }
   }
 
-  & .pitchers span {
-    margin-right: .5rem;
-  }
-
-  & .pitchers span a {
-    color: #147cd1;
-    text-decoration: none
-  }
-
-  & .button {
+  .highlights {
     text-align: right;
-    padding-right: .5rem;
+    margin-right: .5rem;
+
+    & a {
+      padding-left: .5rem;
+
+      &:hover {
+        color: #555;
+      }
+    }
   }
 
-  & .button a:hover {
-    color: #555;
+  @media (min-width: 568px) {
+    display: grid;
+    align-items: center;
+    font-size: .75rem;
+    grid-template-rows: none;
+    grid-template-columns: ${props => props.sort === "round" ? "8% 40% 8% 8% 21% 15%" : "40% 10% 10% 22% 18%"};
+
+    .matchup {
+      order: 0;
+    }
+
+    .pitchers {
+      order: 0;
+      margin-left: 1.25rem;
+    }
+
+    .pitchers > * {
+      display: block;
+    }
   }
 
-  & .button > * {
-    padding-left: .5rem;
+  @media (min-width: 768px) {
+    grid-template-columns: ${props => props.sort === "round" ? "8% 35% 8% 8% 26% 15%" : "35% 10% 10% 20% 25%"};
+    font-size: 1rem;
+    
+    .highlights {
+      font-size: .75rem;
+    }
+  }
+
+  @media (min-width: 860px) {
+    grid-template-columns: ${props => props.sort === "round" ? "7% 30% 7% 7% 39% 10%" : "30% 7% 7% 45% 11%"};
+    align-items: center;
+
+    .pitchers > * {
+      display: inline;
+    }
   }
 `
 
@@ -96,7 +138,7 @@ const GameSummary = props => {
   const homeTeamLogo = teamNameToLogo(removeSpaceAndLower(homeTeam));
   const homeScore = props.homeTeamData.score;
   const gameFinal = props.linescore.scheduledInnings !== props.linescore.currentInning ? `F/${props.linescore.currentInning}`: "FINAL";
-  const broadcast = broadcastImage(props.broadcast.find(obj => obj.isNational).callSign);
+  const broadcastImg = broadcastNameToLogo(props.broadcast.find(obj => obj.isNational).callSign);
   const winningPitcher = props.pitcherDecisions.winningPitcher;
   const winnerUrlSlug = props.pitcherDecisions.winnerUrlSlug;
   const losingPitcher = props.pitcherDecisions.losingPitcher;
@@ -111,9 +153,9 @@ const GameSummary = props => {
   return (
     <Wrapper>
       <Status>{seriesStatus}</Status>
-      <Summary>
-        <div className="teams">
-          {props.sortBy === "round" ? <StyledDate>{gameMonthAndDate}</StyledDate> : null}
+      <Summary sort={props.sortBy}>
+        {props.sortBy === "round" ? <StyledDate className="date">{gameMonthAndDate}</StyledDate> : null}
+        <div className="matchup">
           <a 
             href={awayTeamUrl} 
             target="_blank" 
@@ -146,7 +188,7 @@ const GameSummary = props => {
         </div>
 
         <div className="tv">
-          {broadcast}
+          {broadcastImg}
         </div>
         
         <div className="pitchers">
@@ -155,7 +197,7 @@ const GameSummary = props => {
           {savePitcher ? <span> SV: <a href={`${baseUrl}/player/${saveUrlSlug}`} target="_blank" rel="noopener noreferrer">{savePitcher}</a></span> : null}
         </div>
 
-        <div className="button">
+        <div className="highlights">
 
           <a 
             href={`${baseUrl}/gameday/${props.gameId}/final/wrap`} 
@@ -163,7 +205,7 @@ const GameSummary = props => {
             id="wrapup"
             rel="noopener noreferrer"
             >
-            WRAP
+            Wrap
           </a>
 
           <a 
@@ -172,7 +214,7 @@ const GameSummary = props => {
             id="video"
             rel="noopener noreferrer"
             > 
-            VIDEO
+            Video
           </a>
 
         </div>
