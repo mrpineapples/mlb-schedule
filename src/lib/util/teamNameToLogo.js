@@ -1,14 +1,14 @@
 import React from "react";
-import astros from "../images/teamImages/astros.svg" 
-import athletics from "../images/teamImages/athletics.svg" 
-import braves from "../images/teamImages/braves.svg" 
-import brewers from "../images/teamImages/brewers.svg" 
-import cubs from "../images/teamImages/cubs.svg" 
-import dodgers from "../images/teamImages/dodgers.svg" 
-import indians from "../images/teamImages/indians.svg" 
-import redsox from "../images/teamImages/redsox.svg" 
-import rockies from "../images/teamImages/rockies.svg" 
-import yankees from "../images/teamImages/yankees.svg" 
+import astros from "../../images/teamImages/astros.svg" 
+import athletics from "../../images/teamImages/athletics.svg" 
+import braves from "../../images/teamImages/braves.svg" 
+import brewers from "../../images/teamImages/brewers.svg" 
+import cubs from "../../images/teamImages/cubs.svg" 
+import dodgers from "../../images/teamImages/dodgers.svg" 
+import indians from "../../images/teamImages/indians.svg" 
+import redsox from "../../images/teamImages/redsox.svg" 
+import rockies from "../../images/teamImages/rockies.svg" 
+import yankees from "../../images/teamImages/yankees.svg" 
 
 const teamNameToLogo = team => {
   switch (team) {

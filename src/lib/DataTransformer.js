@@ -87,7 +87,7 @@ export default class DataTransformer {
     })
    
     games.forEach(game => {
-      let calendarDate = this.formatDate(game.gameDate)
+      let calendarDate = game.gameDate
       datesSet.add(calendarDate)
     })
 

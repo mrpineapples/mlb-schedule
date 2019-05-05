@@ -1,9 +1,9 @@
 import React from "react"
-import espn from "../images/broadcastImages/espn.svg" 
-import fox from "../images/broadcastImages/fox.svg" 
-import fs1 from "../images/broadcastImages/fs1.svg" 
-import mlbnet from "../images/broadcastImages/mlbnet.svg" 
-import tbs from "../images/broadcastImages/tbs.svg" 
+import espn from "../../images/broadcastImages/espn.svg"
+import fox from "../../images/broadcastImages/fox.svg" 
+import fs1 from "../../images/broadcastImages/fs1.svg" 
+import mlbnet from "../../images/broadcastImages/mlbnet.svg" 
+import tbs from "../../images/broadcastImages/tbs.svg" 
 
 const broadcastNameToLogo = name => {
   switch (name) {
