@@ -83,12 +83,12 @@ const GameSummary = props => {
   const homeScore = props.homeTeamData.score;
   const gameFinal = props.linescore.scheduledInnings !== props.linescore.currentInning ? `F/${props.linescore.currentInning}`: "FINAL";
   const broadcast = broadcastImage(props.broadcast.find(obj => obj.isNational).callSign);
-  const winningPitcher = props.decisions.winner.initLastName;
-  const winnerUrlSlug = props.decisions.winner.nameSlug
-  const losingPitcher = props.decisions.loser.initLastName;
-  const loserUrlSlug = props.decisions.loser.nameSlug
-  const savePitcher = props.decisions.save ? props.decisions.save.initLastName : null;
-  const saveUrlSlug = props.decisions.save ? props.decisions.save.nameSlug : null;
+  const winningPitcher = props.pitcherDecisions.winningPitcher;
+  const winnerUrlSlug = props.pitcherDecisions.winnerUrlSlug;
+  const losingPitcher = props.pitcherDecisions.losingPitcher;
+  const loserUrlSlug = props.pitcherDecisions.loserUrlSlug;
+  const savePitcher =  props.pitcherDecisions.savePitcher;
+  const saveUrlSlug =  props.pitcherDecisions.saveUrlSlug;
   const baseUrl = `https://www.mlb.com`;
   const awayTeamUrl = `${baseUrl}/${formatTeamForUrl(awayTeam)}`;
   const homeTeamUrl = `${baseUrl}/${formatTeamForUrl(homeTeam)}`;
