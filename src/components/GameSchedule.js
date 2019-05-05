@@ -4,7 +4,7 @@ import GameDate from './GameDate';
 import SeriesType from './SeriesType';
 import DataTransformer from "../lib/DataTransformer";
 
-const url = "http://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=2018&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)"
+const url = "https://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=2018&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)"
 
 class GameSchedule extends Component {
   state = {
