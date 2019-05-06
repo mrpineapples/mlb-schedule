@@ -80,9 +80,12 @@ export default class DataTransformer {
     let datesSet = new Set()
 
     let games = this.createGamesList(cleanedMlbData)
-    games.sort((a, b) => { 
-      let dateA = new Date(a.gameDate)
-      let dateB = new Date(b.gameDate)
+
+    games.sort((a, b) => {
+      // Add current year to date to ensure sort works in all browsers
+      let seasonYear = a.season
+      let dateA = new Date(`${a.gameDate}, ${seasonYear}`)
+      let dateB = new Date(`${b.gameDate}, ${seasonYear}`)
       return dateA - dateB
     })
    
