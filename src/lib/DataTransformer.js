@@ -63,8 +63,8 @@ export default class DataTransformer {
 
     let rounds = [...roundsSet];
     
-    // Business Logic 77-84, I could hardcode the proper array since the order of the series is constant YOY.
-    let order = [9, 0, 1, 2, 3, 6, 4, 5, 8, 7];
+    // Business Logic 77-84, hardcode the proper array since the order of the series is constant YOY.
+    let order = [0, 1, 2, 3, 5, 4, 6, 7, 8];
     let orderedRounds = [];
 
     for (let i = 0; i <= order.length - 1; i++) {
