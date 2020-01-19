@@ -14,12 +14,13 @@ export default class DataTransformer {
         let gameDate = this.formatDate(game.gameDate)
         let awayTeam = game.teams.away
         let homeTeam = game.teams.home
-        let winningPitcher = game.decisions.winner.initLastName
-        let winnerUrlSlug = game.decisions.winner.nameSlug
-        let losingPitcher = game.decisions.loser.initLastName
-        let loserUrlSlug = game.decisions.loser.nameSlug
-        let savePitcher = game.decisions.save ? game.decisions.save.initLastName : null;
-        let saveUrlSlug = game.decisions.save ? game.decisions.save.nameSlug : null;
+        // console.log('game.decisions.winner', game.decisions.winner);
+        let winningPitcher = game && game.decisions && game.decisions.winner && game.decisions.winner.initLastName
+        let winnerUrlSlug = game && game.decisions && game.decisions.winner && game.decisions.winner.nameSlug
+        let losingPitcher = game && game.decisions && game.decisions.winner && game.decisions.loser.initLastName
+        let loserUrlSlug = game && game.decisions && game.decisions.winner && game.decisions.loser.nameSlug
+        let savePitcher = game && game.decisions && game.decisions.save ? game.decisions.save.initLastName : null;
+        let saveUrlSlug = game && game.decisions && game.decisions.save ? game.decisions.save.nameSlug : null;
 
         let pitchers = {
           winningPitcher,
