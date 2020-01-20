@@ -138,7 +138,9 @@ const GameSummary = props => {
   const homeTeamLogo = teamNameToLogo(removeSpaceAndLower(homeTeam));
   const homeScore = props.homeTeamData.score;
   const gameFinal = props.linescore && props.linescore.scheduledInnings !== props.linescore.currentInning ? `F/${props.linescore.currentInning}`: "FINAL";
-  const broadcastImg = broadcastNameToLogo(props.broadcast.find(obj => obj.isNational).callSign);
+  const broadcastInfo = props.broadcast.find(obj => obj.isNational)
+  const broadcastCallsign = typeof broadcastInfo === "object" && broadcastInfo.callSign;
+  const broadcastImg = broadcastNameToLogo(broadcastCallsign);
   const winningPitcher = props.pitcherDecisions.winningPitcher;
   const winnerUrlSlug = props.pitcherDecisions.winnerUrlSlug;
   const losingPitcher = props.pitcherDecisions.losingPitcher;

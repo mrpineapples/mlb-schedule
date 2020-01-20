@@ -19,7 +19,8 @@ const broadcastNameToLogo = name => {
       return <img src={mlbnet} height="20" alt="MLB Network" />;
     case "TBS":
       return <img src={tbs} height="12" alt="TBS" />
-    // no default
+    default:
+      return null
   }
 }
 

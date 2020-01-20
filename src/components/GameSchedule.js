@@ -4,9 +4,8 @@ import GameDate from './GameDate';
 import SeriesType from './SeriesType';
 import DataTransformer from "../lib/DataTransformer";
 
-const url = "https://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=2018&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)"
-
 const GameSchedule = props => {
+  const url = `https://statsapi.mlb.com/api/v1/schedule/postseason/series?sportId=1&season=${props.year}&hydrate=team,broadcasts(all),seriesStatus(useOverride=true),decisions,person,probablePitcher,linescore(matchup)`
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ const GameSchedule = props => {
         })
       })
       .catch(err => console.log(err));
-  }, [])
+  }, [url])
 
   if (!data) {
     return null
@@ -35,10 +34,10 @@ const GameSchedule = props => {
   const rounds = data.rounds;
   const gameDates = data.gameDates;
 
-  let summaries = games.map(game => 
+  let summaries = games.map((game, i) => 
     <GameSummary
       sortBy={props.sort}
-      key={game.gamePk}
+      key={`${game.gamePk}_${i}`}
       gameId={game.gamePk}
       seriesStatus={game.seriesStatus}
       round={game.seriesId}
